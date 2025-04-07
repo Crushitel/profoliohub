@@ -1,0 +1,42 @@
+const { Users } = require('../models');
+const bcrypt = require('bcrypt');
+const ApiError = require('../Error/ApiError');
+
+class UserController{
+    async SignUp(req, res) {
+        const { first_name, last_name, username, email, password, avatar_url, bio } = req.body;
+            bcrypt.hash(password, 10).then(async (hash) => {
+                await Users.create({
+                    first_name,
+                    last_name,
+                    username,
+                    email,
+                    password_hash: hash,
+                    avatar_url,
+                    bio
+                });
+                res.status(200).json("User created");
+            });
+    }
+
+    async SignIn(req, res, next) {
+        const { username, password } = req.body;
+
+        const user = await Users.findOne({ where: { username } });
+        if (!user) {
+            return next(ApiError.unauthorized('Неправильний логін'));
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+        if (!isPasswordValid) {
+            return next(ApiError.unauthorized('Неправильний пароль'));
+        }
+        res.json({ message: "Ти залогінився, братан" });
+    }
+
+
+    async Check(req, res) {
+
+    }
+}
+
+module.exports = new UserController();

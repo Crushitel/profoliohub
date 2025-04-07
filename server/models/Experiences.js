@@ -1,7 +1,7 @@
 
 
 module.exports = (sequelize, DataTypes) => {
-  const Experience = sequelize.define('Experience', {
+  const Experiences = sequelize.define('Experiences', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -30,9 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     });
 
   // Зв'язок з User
-    Experience.associate = (models) => {
-    Experience.belongsTo(models.Users, { foreignKey: 'user_id' });
+    Experiences.associate = (models) => {
+    Experiences.belongsTo(models.Users, { foreignKey: 'user_id' });
     };
 
-    return Experience;
+    return Experiences;
 };

@@ -1,17 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { Project } = require('../models'); 
+const projectsController = require('../controllers/projectsController');
 
-router.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the Projects API',
-  });
-});
+router.get('/', projectsController.getProjects);
 
-router.post("/", async (req, res) => {
-    const oneproject = req.body;
-    await Project.create(oneproject);
-    res.json(oneproject);
-});
+router.get('/:id', projectsController.getProjectById);
+
+router.post('/', projectsController.createProject);
+router.put('/:id', projectsController.updateProject);
+router.delete('/:id', projectsController.deleteProject);
 
 module.exports = router;

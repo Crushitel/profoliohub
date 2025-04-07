@@ -1,7 +1,7 @@
 
 
 module.exports = (sequelize, DataTypes) => {
-    const Project = sequelize.define('Project', {
+    const Projects = sequelize.define('Projects', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -31,9 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     });
 
-    Project.associate = (models) => {
-    Project.belongsTo(models.Users, { foreignKey: 'user_id' });
+    Projects.associate = (models) => {
+    Projects.belongsTo(models.Users, { foreignKey: 'user_id' });
     };
 
-    return Project;
+    return Projects;
 };

@@ -1,7 +1,7 @@
 // models/Review.js
 
 module.exports = (sequelize, DataTypes) => {
-    const Review = sequelize.define('Testimonials', {
+    const Testimonials = sequelize.define('Testimonials', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -24,10 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
   // Зв'язки з User (кому відгук та хто залишив)
-    Review.associate = (models) => {
-        Review.belongsTo(models.Users, { foreignKey: 'user_id' });
-        Review.belongsTo(models.Users, { foreignKey: 'reviewer_id' });
+    Testimonials.associate = (models) => {
+        Testimonials.belongsTo(models.Users, { foreignKey: 'user_id' });
+        Testimonials.belongsTo(models.Users, { foreignKey: 'testimonials_id' });
     };
 
-    return Review;
+    return Testimonials;
 };

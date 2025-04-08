@@ -1,8 +1,8 @@
 const ApiError = require("../Error/ApiError")
 const { Experiences } = require("../models");
 
-class ExperiencessController {
-    async createExperiences(req, res, next) {
+class ExperiencesController {
+    async createExperience(req, res, next) {
         const { title, company, position, start_date, end_date, description, user_id } = req.body;
         try {
             const experiences = await Experiences.create({
@@ -32,7 +32,7 @@ class ExperiencessController {
             return next(ApiError.internalServerError("Failed to fetch Experiences"));
         }
     }
-    async getExperiencesById(req, res, next) {
+    async getExperienceById(req, res, next) {
         const { id } = req.params;
         try {
             const experience = await Experiences.findOne({ where: { id } });
@@ -44,7 +44,7 @@ class ExperiencessController {
             return next(ApiError.internalServerError("Failed to fetch Experiences"));
         }
     }
-    async updateExperiences(req, res, next) {
+    async updateExperience(req, res, next) {
         const { id } = req.params;
         const { title, company, position, start_date, end_date, description } = req.body;
         try {
@@ -59,7 +59,7 @@ class ExperiencessController {
             console.log(error);
         }
     }
-    async deleteExperiences(req, res, next) {
+    async deleteExperience(req, res, next) {
         const { id } = req.params;
         try {
             const experiences = await Experiences.findOne({ where: { id } });
@@ -74,4 +74,4 @@ class ExperiencessController {
     }
 }
 
-module.exports = new ExperiencessController();
+module.exports = new ExperiencesController();

@@ -17,6 +17,10 @@ const ExperiencesRouter = require('./routes/Experiences');
 app.use('/api/Experiences', ExperiencesRouter);
 const TestimonialsRouter = require('./routes/Testimonials');
 app.use('/api/Testimonials', TestimonialsRouter);
+const SkillsRouter = require('./routes/Skills');
+app.use('/api/Skills', SkillsRouter);
+const UserSkillsRouter = require('./routes/UserSkill');
+app.use('/api/UserSkills', UserSkillsRouter);
 
 
 // Error handling middleware

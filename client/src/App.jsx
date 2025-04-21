@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import Profile from './pages/Profile'
 import PageNotFound from './pages/PageNotFound'
+import ProtectedRoute from './components/ProtectedRoute'
 import { Routes, Route } from 'react-router-dom'
 
 
@@ -17,8 +18,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       <Footer />

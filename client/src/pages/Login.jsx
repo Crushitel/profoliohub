@@ -1,6 +1,6 @@
 import { useContext, useState, useLayoutEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance from '../utils/axiosInstance';
 
 const Login = () => {
@@ -72,6 +72,9 @@ const Login = () => {
           </div>
           <button type="submit" className="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-colors">Увійти</button>
         </form>
+        <p className="mt-4 text-center text-white">
+          Немає акаунту? <Link to="/signup" className="text-blue-400 hover:underline">Зареєструйтесь</Link>
+        </p>
       </div>
     </section>
   );

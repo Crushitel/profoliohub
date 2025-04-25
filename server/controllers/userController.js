@@ -1,4 +1,4 @@
-const { Users } = require('../models');
+const { Users, UserSkill, Projects, Experiences, Testimonials, Skill } = require('../models');
 const bcrypt = require('bcrypt');
 const ApiError = require('../Error/ApiError');
 const { Op } = require('sequelize');
@@ -61,6 +61,7 @@ class UserController {
 
             res.json({token});
         } catch (error) {
+            console.log(error);
             next(ApiError.internalServerError('Помилка при вході'));
         }
     }
@@ -72,6 +73,47 @@ class UserController {
             { expiresIn: '24h' } 
         );
         return res.json({token});
+    }
+
+    async getProfile(req, res, next) {
+        try {
+            const user = await Users.findByPk(req.user.id, {
+                attributes: ['id', 'first_name', 'last_name', 'username', 'email', 'avatar_url', 'bio'], // Вибір полів без password_hash
+                include: [
+                    {
+                        model: UserSkill,
+                        include: [
+                            {
+                                model: Skill, // Підтягування навичок через UserSkill
+                                attributes: ['id', 'name'],
+                            },
+                        ],
+                        attributes: ['proficiency'], // Підтягування рівня володіння навичкою
+                    },
+                    {
+                        model: Projects,
+                        attributes: ['id', 'title', 'description', 'image_url', 'github_link', 'demo_link'],
+                    },
+                    {
+                        model: Experiences,
+                        attributes: ['id', 'company', 'position', 'start_date', 'end_date', 'description'],
+                    },
+                    {
+                        model: Testimonials,
+                        attributes: ['id', 'rating', 'comment'],
+                    },
+                ],
+            });
+
+            if (!user) {
+                return next(ApiError.notFound('Користувача не знайдено'));
+            }
+
+            res.json(user);
+        } catch (error) {
+            next(ApiError.internalServerError('Помилка при отриманні профілю'));
+            console.log(error);
+        }
     }
 }
 

@@ -44,5 +44,12 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     });
 
+    Users.associate = (models) => {
+        Users.hasMany(models.UserSkill, { foreignKey: 'user_id' });
+        Users.hasMany(models.Projects, { foreignKey: 'user_id' });
+        Users.hasMany(models.Experiences, { foreignKey: 'user_id' });
+        Users.hasMany(models.Testimonials, { foreignKey: 'user_id' });
+    };
+
     return Users;
 };

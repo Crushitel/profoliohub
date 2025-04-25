@@ -10,5 +10,5 @@ router.post("/login", userController.SignIn);
 
 router.get("/autorize", authMiddleware, userController.Check);
 
-
+router.get('/profile', authMiddleware, userController.getProfile);
 module.exports = router;

@@ -47,7 +47,7 @@ const Login = () => {
         {error && <p className="text-red-500">{error}</p>}
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-white">Логін:</label>
+            <label className="block text-white">Логін:</label>
             <input
               type="text"
               id="username"
@@ -59,7 +59,7 @@ const Login = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-white">Пароль:</label>
+            <label className="block text-white">Пароль:</label>
             <input
               type="password"
               id="password"

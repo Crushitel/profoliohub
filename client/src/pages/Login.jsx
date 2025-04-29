@@ -1,23 +1,26 @@
 import { useContext, useState, useLayoutEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
   const { user, login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const from = location.state?.from?.pathname || "/profile";
+
   useLayoutEffect(() => {
     if (user) {
       setLoading(true);
-      navigate("/profile");
+      navigate(from); 
     } else {
       setLoading(false);
     }
-  }, [user, navigate]);
+  }, [user, navigate, from]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,7 +42,7 @@ const Login = () => {
     try {
       const response = await axiosInstance.post("/user/login", formData);
       login(response.data.token);
-      navigate("/profile");
+      navigate(from); // Перенаправляємо на попередній маршрут
     } catch (err) {
       setError(err.response?.data?.message || "Помилка входу");
     }

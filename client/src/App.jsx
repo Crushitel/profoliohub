@@ -15,6 +15,7 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -27,8 +28,9 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path='*' element={<PageNotFound />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
+      </main>
       <Footer />
     </div>
   )

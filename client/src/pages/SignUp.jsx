@@ -20,11 +20,25 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Перевірка на порожні поля
+    const missingFields = [];
+    if (!formData.first_name) missingFields.push("Ім'я");
+    if (!formData.last_name) missingFields.push("Прізвище");
+    if (!formData.username) missingFields.push("Логін");
+    if (!formData.email) missingFields.push("Електронна пошта");
+    if (!formData.password) missingFields.push("Пароль");
+
+    if (missingFields.length > 0) {
+      setError(`Поле '${missingFields.join(", ")}' обов'язкове`);
+      return;
+    }
+
     try {
       await axiosInstance.post('/user/register', formData);
       setSuccess('Реєстрація успішна! Ви можете увійти.');
       setError('');
-      setTimeout(() => navigate('/login'), 2000); // Перенаправлення на сторінку входу через 2 секунди
+      setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'Помилка реєстрації');
       setSuccess('');
@@ -35,8 +49,8 @@ const SignUp = () => {
     <section className="container mx-auto my-7">
       <div className="mx-3.5 lg:mx-64 px-12 md:px-26 py-8 bg-blue-900 border border-blue-400 rounded-xl">
         <h1 className="text-white text-center text-2xl font-bold">Реєстрація</h1>
-        {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">{success}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {success && <p className="text-green-500 mt-4">{success}</p>}
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="first_name" className="block text-white">Ім'я:</label>
@@ -47,7 +61,6 @@ const SignUp = () => {
               value={formData.first_name}
               onChange={handleChange}
               className="w-full text-white text-light px-3 py-2 border bg-blue-950 border-blue-400 rounded-lg"
-              required
             />
           </div>
           <div className="mb-4">
@@ -59,7 +72,6 @@ const SignUp = () => {
               value={formData.last_name}
               onChange={handleChange}
               className="w-full text-white text-light px-3 py-2 border bg-blue-950 border-blue-400 rounded-lg"
-              required
             />
           </div>
           <div className="mb-4">
@@ -71,7 +83,6 @@ const SignUp = () => {
               value={formData.username}
               onChange={handleChange}
               className="w-full text-white text-light px-3 py-2 border bg-blue-950 border-blue-400 rounded-lg"
-              required
             />
           </div>
           <div className="mb-4">
@@ -83,7 +94,6 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full text-white text-light px-3 py-2 border bg-blue-950 border-blue-400 rounded-lg"
-              required
             />
           </div>
           <div className="mb-4">
@@ -95,7 +105,6 @@ const SignUp = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full text-white text-light px-3 py-2 border bg-blue-950 border-blue-400 rounded-lg"
-              required
             />
           </div>
           <button type="submit" className="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-colors">

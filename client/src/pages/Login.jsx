@@ -1,22 +1,21 @@
-import { useContext, useState, useLayoutEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import axiosInstance from '../utils/axiosInstance';
+import { useContext, useState, useLayoutEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
   const { user, login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true); // Додаємо стан завантаження
+  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Перевірка, чи авторизований користувач
   useLayoutEffect(() => {
     if (user) {
-      setLoading(true); // Якщо користувач авторизований, показуємо "Завантаження..."
-      navigate('/profile'); // Перенаправлення на сторінку профілю
+      setLoading(true);
+      navigate("/profile");
     } else {
-      setLoading(false); // Якщо користувач не авторизований, показуємо сторінку входу
+      setLoading(false);
     }
   }, [user, navigate]);
 
@@ -26,25 +25,37 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Перевірка на порожні поля
+    const missingFields = [];
+    if (!formData.username) missingFields.push("Логін");
+    if (!formData.password) missingFields.push("Пароль");
+
+    if (missingFields.length > 0) {
+      setError(`Поле '${missingFields.join(", ")}' обов'язкове`);
+      return;
+    }
+
     try {
-      const response = await axiosInstance.post('/user/login', formData);
+      const response = await axiosInstance.post("/user/login", formData);
       login(response.data.token);
-      navigate('/profile');
+      navigate("/profile");
     } catch (err) {
-      setError(err.response?.data?.message || 'Помилка входу');
+      setError(err.response?.data?.message || "Помилка входу");
     }
   };
 
   if (loading) {
-    // Показуємо "Завантаження..." для авторизованого користувача
     return <div className="text-white">Завантаження...</div>;
   }
 
   return (
     <section className="container mx-auto my-7">
-      <div className="mx-3.5 lg:mx-64 px-12 md:px-26 py-8 bg-blue-900 border border-blue-400 rounded-xl">
-        <h1 className="text-white text-center text-2xl font-bold">Вхід до платформи</h1>
-        {error && <p className="text-red-500">{error}</p>}
+      <div className="mx-3.5 rounded-xl border border-blue-400 bg-blue-900 px-12 py-8 md:px-26 lg:mx-64">
+        <h1 className="text-center text-2xl font-bold text-white">
+          Вхід до платформи
+        </h1>
+        {error && <p className="mt-4 text-red-500">{error}</p>}
         <form className="mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-white">Логін:</label>
@@ -54,8 +65,7 @@ const Login = () => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full text-white text-light px-3 py-2 border bg-blue-950 border-blue-400 rounded-lg"
-              required
+              className="text-light w-full rounded-lg border border-blue-400 bg-blue-950 px-3 py-2 text-white"
             />
           </div>
           <div className="mb-4">
@@ -66,14 +76,21 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border text-white bg-blue-950 border-blue-400 rounded-lg"
-              required
+              className="w-full rounded-lg border border-blue-400 bg-blue-950 px-3 py-2 text-white"
             />
           </div>
-          <button type="submit" className="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-colors">Увійти</button>
+          <button
+            type="submit"
+            className="rounded-lg bg-blue-700 px-6 py-2 text-white transition-colors hover:bg-blue-600"
+          >
+            Увійти
+          </button>
         </form>
         <p className="mt-4 text-center text-white">
-          Немає акаунту? <Link to="/signup" className="text-blue-400 hover:underline">Зареєструйтесь</Link>
+          Немає акаунту?{" "}
+          <Link to="/signup" className="text-blue-400 hover:underline">
+            Зареєструйтесь
+          </Link>
         </p>
       </div>
     </section>

@@ -1,38 +1,46 @@
-import Navbar from "./Navbar"
-import Logo from "/Logo.svg"
-import { MdMenu } from "react-icons/md";
+import Navbar from "./Navbar";
+import BurgerMenu from "./BurgerMenu";
+import Logo from "/Logo.svg";
 import { Link } from "react-router-dom";
-import { useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
     <header className="bg-blue-900">
-      <div className="container mx-auto px-3.5 py-4 flex items-center justify-between">
-        <Link to="/" className="flex group cursor-pointer items-center">
-          <img src={Logo} alt="Logo" className="w-35 h-9" />
+      <div className="container mx-auto flex items-center justify-between px-3.5 py-4">
+        <Link to="/" className="group flex cursor-pointer items-center">
+          <img src={Logo} alt="Logo" className="h-9 w-35" />
         </Link>
         <Navbar />
-        <div className="hidden lg:block space-x-4">
+        <div className="hidden space-x-4 lg:block">
           {user ? (
             <button
               onClick={logout}
-              className="px-6 py-1.5 cursor-pointer text-white bg-red-700 border border-red-700 rounded-xl hover:bg-red-600 transition-colors"
+              className="cursor-pointer rounded-xl border border-red-700 bg-red-700 px-6 py-1.5 text-white transition-colors hover:bg-red-600"
             >
               Вийти
             </button>
           ) : (
             <>
-              <Link to="/login" className="px-6 py-1.5 cursor-pointer text-white bg-blue-700 border border-purple-700 rounded-xl hover:bg-blue-600 transition-colors">Вхід</Link>
-              <Link to="/signup" className="px-6 py-1.5 cursor-pointer text-white bg-blue-900 border border-purple-700 rounded-xl hover:bg-blue-600 transition-colors">Реєстрація</Link>
+              <Link
+                to="/login"
+                className="cursor-pointer rounded-xl border border-purple-700 bg-blue-700 px-6 py-1.5 text-white transition-colors hover:bg-blue-600"
+              >
+                Вхід
+              </Link>
+              <Link
+                to="/signup"
+                className="cursor-pointer rounded-xl border border-purple-700 bg-blue-900 px-6 py-1.5 text-white transition-colors hover:bg-blue-600"
+              >
+                Реєстрація
+              </Link>
             </>
           )}
         </div>
-        <button className="group lg:hidden flex items-center justify-center w-10 h-10 bg-blue-950 border border-purple-800 rounded-xl hover:bg-blue-800 transition-colors">
-          <MdMenu className="text-blue-700 text-2xl group-hover:text-blue-300 transition-colors" />
-        </button>
+        <BurgerMenu user={user} logout={logout} />
       </div>
     </header>
   );

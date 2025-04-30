@@ -7,6 +7,15 @@
     min-height: 100vh;
 }
 
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE та Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
+
 main {
     flex: 1;
 }

@@ -1,17 +1,16 @@
-import './App.css'
-import Header from './components/header/Header'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import SignUp from './pages/SignUp'
-import Profile from './pages/Profile'
-import PageNotFound from './pages/PageNotFound'
-import ProtectedRoute from './components/ProtectedRoute'
-import { Routes, Route } from 'react-router-dom'
-
+import "./App.css";
+import Header from "./components/header/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import PageNotFound from "./pages/PageNotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-
   return (
     <div className="App">
       <Header />
@@ -28,12 +27,20 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/profile/edit"
+            element={
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

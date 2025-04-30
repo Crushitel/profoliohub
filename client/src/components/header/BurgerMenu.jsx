@@ -86,7 +86,7 @@ const BurgerMenu = ({ user, logout }) => {
               className="block text-white transition-colors hover:text-purple-600"
               onClick={() => setIsOpen(false)}
             >
-              Контакти
+              Пошук
             </Link>
           </li>
           {user ? (

@@ -194,7 +194,7 @@ const Search = () => {
 
                 <div className="mt-3">
                   <Link 
-                    to={`/users/${user.id}`} 
+                    to={`/profile/${user.username}`} 
                     className="block w-full text-center py-2 bg-blue-700 hover:bg-blue-600 transition-colors rounded"
                   >
                     Переглянути профіль

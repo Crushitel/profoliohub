@@ -16,4 +16,6 @@ router.put('/profile', authMiddleware, userController.updateProfile);
 
 router.get('/search', userController.searchUsers);
 
+router.get('/public/:username', userController.getPublicProfile);
+
 module.exports = router;

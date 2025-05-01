@@ -160,6 +160,71 @@ class UserController {
         }
     }
 
+    async getPublicProfile(req, res, next) {
+        try {
+            const { username } = req.params;
+            
+            const user = await Users.findOne({
+                where: { username },
+                attributes: [
+                    "id",
+                    "first_name",
+                    "last_name",
+                    "username",
+                    "avatar_url",
+                    "bio",
+                ],
+                include: [
+                    {
+                        model: UserSkill,
+                        include: [
+                            {
+                                model: Skill,
+                                attributes: ["id", "name"],
+                            },
+                        ],
+                        attributes: ["id", "proficiency"],
+                    },
+                    {
+                        model: Projects,
+                        attributes: [
+                            "id",
+                            "title",
+                            "description",
+                            "image_url",
+                            "github_link",
+                            "demo_link",
+                        ],
+                    },
+                    {
+                        model: Experiences,
+                        attributes: [
+                            "id",
+                            "company",
+                            "position",
+                            "start_date",
+                            "end_date",
+                            "description",
+                        ],
+                    },
+                    {
+                        model: Testimonials,
+                        attributes: ["id", "rating", "comment"],
+                    },
+                ],
+            });
+
+            if (!user) {
+                return next(ApiError.notFound("Користувача не знайдено"));
+            }
+
+            res.json(user);
+        } catch (error) {
+            console.log(error);
+            next(ApiError.internalServerError("Помилка при отриманні профілю"));
+        }
+    }
+
     async updateProfile(req, res, next) {
         try {
             const { first_name, last_name, avatar_url, bio } = req.body;

@@ -9,6 +9,7 @@ import Search from "./pages/Search";
 import EditProfile from "./pages/EditProfile";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicProfile from "./pages/PublicProfile";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/profile/:username" element={<PublicProfile />} />
           <Route
             path="/profile"
             element={

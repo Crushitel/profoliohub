@@ -82,7 +82,7 @@ const BurgerMenu = ({ user, logout }) => {
           </li>
           <li className="mb-2">
             <Link
-              to="/"
+              to="/search"
               className="block text-white transition-colors hover:text-purple-600"
               onClick={() => setIsOpen(false)}
             >

@@ -6,7 +6,7 @@ const Navbar = () => {
             <li><Link to="/" className="text-white hover:text-purple-600 transition-colors">Головна</Link></li>
             <li><Link to="/" className="text-white hover:text-purple-600 transition-colors">Портфоліо</Link></li>
             <li><Link to="/profile" className="text-white hover:text-purple-600 transition-colors">Профіль</Link></li>
-            <li><Link to="/" className="text-white hover:text-purple-600 transition-colors">Пошук</Link></li>
+            <li><Link to="/search" className="text-white hover:text-purple-600 transition-colors">Пошук</Link></li>
         </ul>
   )
 }

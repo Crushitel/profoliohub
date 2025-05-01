@@ -187,6 +187,77 @@ class UserController {
             next(ApiError.internalServerError("Помилка при оновленні профілю"));
         }
     }
+
+    async searchUsers(req, res, next) {
+        try {
+            const { username, name, skill_id } = req.query;
+            
+            // Базові умови пошуку
+            const whereConditions = {};
+            const includeOptions = [];
+            
+            // Формуємо умови пошуку за username або ім'ям/прізвищем
+            if (username || name) {
+                const nameConditions = [];
+                
+                if (username) {
+                    nameConditions.push({ 
+                        username: { [Op.like]: `%${username}%` } 
+                    });
+                }
+                
+                if (name) {
+                    nameConditions.push({ 
+                        [Op.or]: [
+                            { first_name: { [Op.like]: `%${name}%` } },
+                            { last_name: { [Op.like]: `%${name}%` } }
+                        ]
+                    });
+                }
+                
+                whereConditions[Op.or] = nameConditions;
+            }
+            
+            // Налаштування для включення навичок
+            const skillInclude = {
+                model: UserSkill,
+                include: [{
+                    model: Skill,
+                    attributes: ['id', 'name']
+                }],
+                attributes: ['id', 'proficiency']
+            };
+            
+            // Якщо шукаємо за конкретною навичкою
+            if (skill_id) {
+                skillInclude.where = { skill_id };
+            }
+            
+            includeOptions.push(skillInclude);
+            
+            // Включаємо проекти для відображення в результатах пошуку
+            includeOptions.push({
+                model: Projects,
+                attributes: ['id', 'title', 'description', 'image_url'],
+                limit: 3
+            });
+            
+            // Виконання пошуку з обмеженням кількості результатів
+            const users = await Users.findAll({
+                where: whereConditions,
+                attributes: ['id', 'username', 'first_name', 'last_name', 'avatar_url', 'bio'],
+                include: includeOptions,
+                limit: 20,
+                order: [['first_name', 'ASC']]
+            });
+            
+            res.json(users);
+            
+        } catch (error) {
+            console.log(error);
+            next(ApiError.internalServerError('Помилка при пошуку користувачів'));
+        }
+    }
 }
 
 module.exports = new UserController();

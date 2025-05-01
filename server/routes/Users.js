@@ -14,4 +14,6 @@ router.get('/profile', authMiddleware, userController.getProfile);
 
 router.put('/profile', authMiddleware, userController.updateProfile);
 
+router.get('/search', userController.searchUsers);
+
 module.exports = router;

@@ -36,13 +36,25 @@ function SkillsTab({ profileData }) {
         setSuccessMessage('');
         
         try {
+            // Отримуємо інформацію про навичку до створення
+            const selectedSkill = availableSkills.find(skill => skill.id === parseInt(newSkill));
+            
+            // Створюємо навичку
             const response = await axiosInstance.post('/userskills', {
                 skill_id: newSkill,
                 proficiency,
                 user_id: profileData.id
             });
             
-            setSkills([...skills, response.data]);
+            // Формуємо правильну структуру для оновлення state
+            const formattedSkill = {
+                id: response.data.id,
+                proficiency: response.data.proficiency,
+                Skill: selectedSkill // Додаємо об'єкт навички з доступних навичок
+            };
+            
+            // Оновлюємо список навичок
+            setSkills([...skills, formattedSkill]);
             setNewSkill('');
             setProficiency(50);
             setSuccessMessage("Навичку успішно додано!");

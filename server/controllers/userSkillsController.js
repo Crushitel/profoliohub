@@ -7,7 +7,7 @@ class UserSkillsController{
             const userSkills = await UserSkill.findAll();
             res.status(200).json(userSkills);
         } catch (error) {
-            return next(ApiError.internal('Error while getting user skills'));
+            return next(ApiError.internalServerError('Error while getting user skills'));
         }
     }
     async createUserSkill(req, res, next) {
@@ -16,7 +16,8 @@ class UserSkillsController{
             const userSkill = await UserSkill.create({ proficiency, user_id, skill_id });
             res.status(201).json(userSkill);
         } catch (error) {
-            return next(ApiError.internal('Error while creating user skill'));
+            next(ApiError.internalServerError('Error while creating user skill'));
+            console.log(error);
         }
     }
     async getUserSkillById(req, res, next) {

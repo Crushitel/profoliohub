@@ -118,7 +118,7 @@ class UserController {
                                 attributes: ["id", "name"],
                             },
                         ],
-                        attributes: ["proficiency"], // Підтягування рівня володіння навичкою
+                        attributes: ["id", "proficiency"], // Підтягування рівня володіння навичкою
                     },
                     {
                         model: Projects,

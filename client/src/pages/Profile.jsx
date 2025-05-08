@@ -153,19 +153,29 @@ const Profile = () => {
 
       {/* Відгуки */}
       <div className="mt-6 rounded-lg bg-blue-900 p-6 shadow-md">
-        <h2 className="mb-4 text-xl font-bold">Відгуки</h2>
+      <h2 className="mb-4 text-xl font-bold">Відгуки</h2>
+        
         {profile.Testimonials && profile.Testimonials.length > 0 ? (
-          profile.Testimonials.map((testimonial) => (
-            <div
-              key={testimonial.id}
-              className="mb-4 rounded-lg bg-blue-700 p-4"
-            >
-              <p className="font-bold">Рейтинг: {testimonial.rating} / 5</p>
-              <p>{testimonial.comment || "Коментар відсутній"}</p>
-            </div>
-          ))
+          <div className="space-y-4 mb-8">
+            {profile.Testimonials.map((testimonial) => (
+              <div
+                key={testimonial.id}
+                className="rounded-lg bg-blue-700 p-4"
+              >
+                <div className="flex items-center mb-2">
+                  <div className="flex">
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <span key={i} className={`text-xl ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-500'}`}>★</span>
+                    ))}
+                  </div>
+                  <span className="ml-2 text-sm text-blue-300">{testimonial.rating}/5</span>
+                </div>
+                <p>{testimonial.comment || "Коментар відсутній"}</p>
+              </div>
+            ))}
+          </div>
         ) : (
-          <p>Інформація відсутня</p>
+          <p className="text-blue-300 mb-6">Відгуків ще немає</p>
         )}
       </div>
     </div>

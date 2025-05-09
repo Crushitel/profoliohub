@@ -6,6 +6,8 @@ const {
     Testimonials,
     Skill,
 } = require("../models");
+const uuid  = require("uuid");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const ApiError = require("../Error/ApiError");
 const { Op } = require("sequelize");
@@ -227,8 +229,10 @@ class UserController {
 
     async updateProfile(req, res, next) {
         try {
-            const { first_name, last_name, avatar_url, bio } = req.body;
-
+            const { first_name, last_name, bio } = req.body;
+            const { avatar_url } = req.files
+            let avatar_path = uuid.v4() + ".jpg";
+            avatar_url.mv(path.resolve(__dirname, "..", "static", avatar_path));
             // Перевірка, чи існує користувач
             const user = await Users.findByPk(req.user.id);
             if (!user) {
@@ -239,7 +243,7 @@ class UserController {
             await user.update({
                 first_name: first_name || user.first_name,
                 last_name: last_name || user.last_name,
-                avatar_url: avatar_url || user.avatar_url,
+                avatar_url: avatar_path || user.avatar_url,
                 bio: bio || user.bio,
             });
 

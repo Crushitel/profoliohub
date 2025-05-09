@@ -86,10 +86,10 @@ const PublicProfile = () => {
       {/* Основна інформація */}
       <div className="rounded-lg bg-blue-900 p-4 md:p-6 text-center shadow-md">
         <div className="flex flex-col items-center">
-          <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-white">
+          <div className="mb-4 flex h-32 w-32 items-center justify-center rounded-full bg-white">
             {profile.avatar_url ? (
               <img
-                src={profile.avatar_url}
+                src={`http://localhost:3001/${profile.avatar_url}`}
                 alt="Avatar"
                 className="h-full w-full rounded-full object-cover"
               />

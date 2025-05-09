@@ -160,7 +160,7 @@ const Search = () => {
                 <div className="flex items-center mb-3">
                   <div className="w-14 h-14 rounded-full bg-white mr-3 flex items-center justify-center">
                     {user.avatar_url ? (
-                      <img src={user.avatar_url} alt="Avatar" className="w-full h-full rounded-full" />
+                      <img src={`http://localhost:3001/${user.avatar_url}`} alt="Avatar" className="w-full h-full rounded-full" />
                     ) : (
                       <img src={Avatar} alt="Default avatar" className="w-10" />
                     )}

@@ -33,37 +33,36 @@ const Profile = () => {
 
   return (
     <div className="container mx-auto my-7 px-3 text-white">
-      {/* Основна інформація */}
-      <div className="rounded-lg bg-blue-900 p-6 text-center shadow-md">
-        <div className="flex flex-col items-center">
-          <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-white">
-            {profile.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt="Avatar"
-                className="h-full w-full rounded-full"
-              />
-            ) : (
-              <img src={Avatar} alt="avatar" className="w-14" />
-            )}
+        <div className="rounded-lg bg-blue-900 p-6 text-center shadow-md">
+          <div className="flex flex-col items-center">
+            <div className="mb-4 flex h-32 w-32 items-center justify-center rounded-full bg-white">
+          {profile.avatar_url ? (
+            <img
+              src={`http://localhost:3001/${profile.avatar_url}`}
+              alt="Avatar"
+              className="h-full w-full rounded-full"
+            />
+          ) : (
+            <img src={Avatar} alt="avatar" className="w-14" />
+          )}
+            </div>
+            <h1 className="text-2xl font-bold">
+          {profile.first_name} {profile.last_name}
+            </h1>
+            <p className="text-blue-300">@{profile.username}</p>
+            <p className="text-sm text-blue-400">
+          {profile.bio || "Інформація відсутня"}
+            </p>
+            <Link
+          to="/profile/edit"
+          className="mt-4 inline-block rounded bg-blue-700 px-4 py-2 font-bold text-white hover:bg-blue-600"
+            >
+          Редагувати профіль
+            </Link>
           </div>
-          <h1 className="text-2xl font-bold">
-            {profile.first_name} {profile.last_name}
-          </h1>
-          <p className="text-blue-300">@{profile.username}</p>
-          <p className="text-sm text-blue-400">
-            {profile.bio || "Інформація відсутня"}
-          </p>
-          <Link
-            to="/profile/edit"
-            className="mt-4 inline-block rounded bg-blue-700 px-4 py-2 font-bold text-white hover:bg-blue-600"
-          >
-            Редагувати профіль
-          </Link>
         </div>
-      </div>
 
-      {/* Навички */}
+        {/* Навички */}
       <div className="mt-6 rounded-lg bg-blue-900 p-6 shadow-md">
         <h2 className="mb-4 text-xl font-bold">Навички</h2>
         {profile.UserSkills && profile.UserSkills.length > 0 ? (

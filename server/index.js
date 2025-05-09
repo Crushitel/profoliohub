@@ -1,11 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const path = require('path');
+const fileUpload = require('express-fileupload');
 const db = require('./models');
 const cors = require('cors');
 const ErrorHandler = require('./middleware/ErrorHandlingMiddleware');
 app.use(express.json());
-
+app.use(express.static(path.resolve(__dirname, 'static')))
+app.use(fileUpload({}))
 app.use(cors());
 
 // routers

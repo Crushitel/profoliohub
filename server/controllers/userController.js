@@ -173,6 +173,7 @@ class UserController {
                     "first_name",
                     "last_name",
                     "username",
+                    "email",
                     "avatar_url",
                     "bio",
                 ],
@@ -229,14 +230,42 @@ class UserController {
 
     async updateProfile(req, res, next) {
         try {
-            const { first_name, last_name, bio } = req.body;
-            const { avatar_url } = req.files
-            let avatar_path = uuid.v4() + ".jpg";
-            avatar_url.mv(path.resolve(__dirname, "..", "static", avatar_path));
+            const { first_name, last_name, bio, email, username } = req.body;
+            let avatar_path = null;
+            
             // Перевірка, чи існує користувач
             const user = await Users.findByPk(req.user.id);
             if (!user) {
                 return next(ApiError.notFound("Користувача не знайдено"));
+            }
+            
+            // Перевіряємо, чи є файл avatar_url в запиті
+            if (req.files && req.files.avatar_url) {
+                const avatar_url = req.files.avatar_url;
+                avatar_path = uuid.v4() + path.extname(avatar_url.name);
+                avatar_url.mv(path.resolve(__dirname, "..", "static", avatar_path));
+            }
+
+            // Якщо email змінився, перевіряємо чи він унікальний
+            if (email && email !== user.email) {
+                const existingUserWithEmail = await Users.findOne({
+                    where: { email }
+                });
+                
+                if (existingUserWithEmail) {
+                    return next(ApiError.badRequest("Користувач з таким email вже існує"));
+                }
+            }
+
+            // Якщо username змінився, перевіряємо чи він унікальний
+            if (username && username !== user.username) {
+                const existingUserWithUsername = await Users.findOne({
+                    where: { username }
+                });
+                
+                if (existingUserWithUsername) {
+                    return next(ApiError.badRequest("Користувач з таким username вже існує"));
+                }
             }
 
             // Оновлення базової інформації користувача
@@ -245,11 +274,15 @@ class UserController {
                 last_name: last_name || user.last_name,
                 avatar_url: avatar_path || user.avatar_url,
                 bio: bio || user.bio,
+                email: email || user.email,
+                username: username || user.username // Додано оновлення username
             });
 
             // Повертаємо оновлені дані користувача
             res.json({
                 message: "Профіль успішно оновлено",
+                avatar_url: avatar_path || user.avatar_url,
+                username: username || user.username // Повертаємо оновлений username
             });
         } catch (error) {
             console.log(error);

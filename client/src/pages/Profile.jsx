@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "/User-avatar.svg";
 import axiosInstance from "../utils/axiosInstance";
+// Імпортуємо іконку для email
+import { FaEnvelope } from "react-icons/fa";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -40,7 +42,7 @@ const Profile = () => {
             <img
               src={`http://localhost:3001/${profile.avatar_url}`}
               alt="Avatar"
-              className="h-full w-full rounded-full"
+              className="h-full w-full rounded-full object-cover"
             />
           ) : (
             <img src={Avatar} alt="avatar" className="w-14" />
@@ -50,9 +52,18 @@ const Profile = () => {
           {profile.first_name} {profile.last_name}
             </h1>
             <p className="text-blue-300">@{profile.username}</p>
-            <p className="text-sm text-blue-400">
+            
+            <p className="text-sm text-blue-400 mt-2">
           {profile.bio || "Інформація відсутня"}
             </p>
+
+            {/* Додаємо email під username */}
+            {profile.email && (
+              <p className="text-blue-200 flex items-center justify-center mt-1">
+                <FaEnvelope className="mr-2" /> {profile.email}
+              </p>
+            )}
+            
             <Link
           to="/profile/edit"
           className="mt-4 inline-block rounded bg-blue-700 px-4 py-2 font-bold text-white hover:bg-blue-600"

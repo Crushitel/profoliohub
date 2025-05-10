@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import { AuthContext } from "../context/AuthContext";
 import Avatar from "/User-avatar.svg";
+// Імпортуємо іконку для email
+import { FaEnvelope } from "react-icons/fa";
 
 const PublicProfile = () => {
   const { username } = useParams(); // Отримуємо username з URL
@@ -101,9 +103,19 @@ const PublicProfile = () => {
             {profile.first_name} {profile.last_name}
           </h1>
           <p className="text-blue-300">@{profile.username}</p>
+
           <p className="mt-2 text-sm text-blue-400 max-w-md">
             {profile.bio || "Інформація відсутня"}
           </p>
+
+          {profile.email && (
+            <a 
+              href={`mailto:${profile.email}`}
+              className="flex items-center text-blue-200 hover:text-blue-100 mt-2 transition-colors"
+            >
+              <FaEnvelope className="mr-2" /> Написати листа
+            </a>
+          )}
         </div>
       </div>
 

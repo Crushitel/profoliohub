@@ -8,6 +8,8 @@ function BasicInfoTab({ profileData }) {
     const [avatarPreview, setAvatarPreview] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState(''); // Додаємо стан для username
     const [successMessage, setSuccessMessage] = useState('');
     const [error, setError] = useState('');
 
@@ -33,6 +35,8 @@ function BasicInfoTab({ profileData }) {
         if (profileData) {
             setBio(profileData.bio || '');
             setAvatar(profileData.avatar_url || '');
+            setEmail(profileData.email || '');
+            setUsername(profileData.username || ''); // Ініціалізуємо username
             
             // Форматуємо URL аватара для правильного відображення
             if (profileData.avatar_url) {
@@ -74,16 +78,40 @@ function BasicInfoTab({ profileData }) {
         reader.readAsDataURL(file);
     };
 
+    // Базова валідація email
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    // Базова валідація username
+    const validateUsername = (username) => {
+        // Username має бути мінімум 3 символи і містити лише латинські літери, цифри та підкреслення
+        return /^[a-zA-Z0-9_]{3,}$/.test(username);
+    };
 
     const handleSaveBasicInfo = async () => {
         setSuccessMessage('');
         setError('');
+
+        // Валідація email
+        if (email && !validateEmail(email)) {
+            setError('Будь ласка, введіть коректну email адресу');
+            return;
+        }
+
+        // Валідація username
+        if (username && !validateUsername(username)) {
+            setError('Нікнейм має містити мінімум 3 символи та складатися лише з латинських літер, цифр і підкреслень');
+            return;
+        }
 
         try {
             const formData = new FormData();
             formData.append('first_name', firstName);
             formData.append('last_name', lastName);
             formData.append('bio', bio);
+            formData.append('email', email);
+            formData.append('username', username); // Додаємо username до форми
 
             // Якщо є файл - додаємо його
             if (avatarFile) {
@@ -137,9 +165,8 @@ function BasicInfoTab({ profileData }) {
                         <img 
                             src={avatarPreview} 
                             alt="Avatar Preview" 
-                            className="h-32 w-32 rounded-full border-2 border-blue-500" 
+                            className="h-32 w-32 rounded-full border-2 border-blue-500 object-cover" 
                         />
-                        
                     </div>
                 )}
                 
@@ -153,6 +180,21 @@ function BasicInfoTab({ profileData }) {
                     />
                     <p className="text-xs text-blue-300 mt-1">Максимальний розмір: 5MB</p>
                 </div>
+            </div>
+            
+            {/* Поле для username */}
+            <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Нікнейм</label>
+                <input
+                    type="text"
+                    className="w-full p-2 rounded bg-blue-950 border border-blue-700 text-white"
+                    placeholder="Введіть ваш username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <p className="text-xs text-blue-300 mt-1">
+                    Використовуйте лише латинські літери, цифри та підкреслення
+                </p>
             </div>
             
             <div className="mb-4">
@@ -174,6 +216,17 @@ function BasicInfoTab({ profileData }) {
                     placeholder="Введіть ваше прізвище"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
+                />
+            </div>
+            
+            <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Email</label>
+                <input
+                    type="email"
+                    className="w-full p-2 rounded bg-blue-950 border border-blue-700 text-white"
+                    placeholder="Введіть ваш email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
             

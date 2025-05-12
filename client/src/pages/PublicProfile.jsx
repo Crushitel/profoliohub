@@ -148,6 +148,15 @@ const PublicProfile = () => {
           <div className="space-y-4">
             {profile.Projects.map((project) => (
               <div key={project.id} className="rounded-lg bg-blue-700 p-4">
+                {project.image_url && (
+                  <div className="mb-3">
+                    <img 
+                      src={`http://localhost:3001${project.image_url}`} 
+                      alt={project.title}
+                      className="w-full h-48 object-cover rounded-lg" 
+                    />
+                  </div>
+                )}
                 <h3 className="font-bold">{project.title}</h3>
                 <p>{project.description}</p>
                 <div className="mt-2 flex space-x-4">
@@ -181,35 +190,43 @@ const PublicProfile = () => {
       </div>
 
       {/* Досвід */}
-      <div className="mt-6 rounded-lg bg-blue-900 p-4 md:p-6 shadow-md">
-        <h2 className="mb-4 text-xl font-bold">Досвід</h2>
-        {profile.Experiences && profile.Experiences.length > 0 ? (
-          <div className="space-y-4">
-            {profile.Experiences.map((experience) => {
-              const startYear = new Date(experience.start_date).getFullYear();
-              const endYear = experience.end_date
-                ? new Date(experience.end_date).getFullYear()
-                : "Теперішній час";
+      {/* Досвід */}
+<div className="mt-6 rounded-lg bg-blue-900 p-4 md:p-6 shadow-md">
+  <h2 className="mb-4 text-xl font-bold">Досвід</h2>
+  {profile.Experiences && profile.Experiences.length > 0 ? (
+    <div className="space-y-4">
+      {profile.Experiences.map((experience) => {
+        // Форматування дати в стилі ДД.ММ.РРРР
+        const formatDate = (dateString) => {
+          if (!dateString) return "Теперішній час";
+          const date = new Date(dateString);
+          return date.toLocaleDateString('uk-UA'); // Формат для України: ДД.ММ.РРРР
+        };
+        
+        const startDate = formatDate(experience.start_date);
+        const endDate = experience.end_date 
+          ? formatDate(experience.end_date) 
+          : "Теперішній час";
 
-              return (
-                <div
-                  key={experience.id}
-                  className="rounded-lg bg-blue-700 p-4"
-                >
-                  <h3 className="font-bold">{experience.position}</h3>
-                  <p className="text-sm text-blue-300">{experience.company}</p>
-                  <p>
-                    {startYear} - {endYear}
-                  </p>
-                  <p>{experience.description}</p>
-                </div>
-              );
-            })}
+        return (
+          <div
+            key={experience.id}
+            className="rounded-lg bg-blue-700 p-4"
+          >
+            <h3 className="font-bold">{experience.position}</h3>
+            <p className="text-sm text-blue-300">{experience.company}</p>
+            <p className="text-sm text-blue-200 mt-1">
+              {startDate} - {endDate}
+            </p>
+            <p className="mt-2">{experience.description}</p>
           </div>
-        ) : (
-          <p className="text-blue-300">Інформація відсутня</p>
-        )}
-      </div>
+        );
+      })}
+    </div>
+  ) : (
+    <p className="text-blue-300">Інформація відсутня</p>
+  )}
+</div>
 
       {/* Відгуки */}
       <div className="mt-6 rounded-lg bg-blue-900 p-4 md:p-6 shadow-md">

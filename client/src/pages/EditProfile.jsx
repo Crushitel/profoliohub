@@ -60,25 +60,25 @@ function EditProfile() {
       <div className="scrollbar-hide mb-6 overflow-x-auto border-b border-blue-700">
         <div className="flex whitespace-nowrap">
           <button
-            className={`mr-2 min-w-24 text-sm transition-colors sm:px-4 py-3 md:min-w-0 md:py-2 md:text-base ${activeTab === "bio" ? "rounded-t-lg bg-blue-700" : "hover:rounded-t-lg hover:bg-blue-800"}`}
+            className={`mr-2 min-w-24 rounded-t-lg py-3 text-sm transition-colors sm:px-4 md:min-w-0 md:py-2 md:text-base ${activeTab === "bio" ? "bg-blue-700" : "hover:bg-blue-800"}`}
             onClick={() => setActiveTab("bio")}
           >
             Основна
           </button>
           <button
-            className={`mr-2 min-w-24 text-sm transition-colors sm:px-4 py-3 md:min-w-0 md:py-2 md:text-base ${activeTab === "skills" ? "rounded-t-lg bg-blue-700" : "hover:rounded-t-lg hover:bg-blue-800"}`}
+            className={`mr-2 min-w-24 rounded-t-lg py-3 text-sm transition-colors sm:px-4 md:min-w-0 md:py-2 md:text-base ${activeTab === "skills" ? "bg-blue-700" : "hover:bg-blue-800"}`}
             onClick={() => setActiveTab("skills")}
           >
             Навички
           </button>
           <button
-            className={`mr-2 min-w-24 text-sm transition-colors sm:px-4 py-3 md:min-w-0 md:py-2 md:text-base ${activeTab === "projects" ? "rounded-t-lg bg-blue-700" : "hover:rounded-t-lg hover:bg-blue-800"}`}
+            className={`mr-2 min-w-24 rounded-t-lg py-3 text-sm transition-colors sm:px-4 md:min-w-0 md:py-2 md:text-base ${activeTab === "projects" ? "bg-blue-700" : "hover:bg-blue-800"}`}
             onClick={() => setActiveTab("projects")}
           >
             Проекти
           </button>
           <button
-            className={`mr-2 min-w-24 text-sm transition-colors sm:px-4 py-3 md:min-w-0 md:py-2 md:text-base ${activeTab === "experience" ? "rounded-t-lg bg-blue-700" : "hover:rounded-t-lg hover:bg-blue-800"}`}
+            className={`mr-2 min-w-24 rounded-t-lg py-3 text-sm transition-colors sm:px-4 md:min-w-0 md:py-2 md:text-base ${activeTab === "experience" ? "bg-blue-700" : "hover:bg-blue-800"}`}
             onClick={() => setActiveTab("experience")}
           >
             Досвід

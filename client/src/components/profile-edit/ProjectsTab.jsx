@@ -6,10 +6,11 @@ function ProjectsTab({ profileData }) {
     const [newProject, setNewProject] = useState({
         title: '',
         description: '',
-        image_url: '',
+        image_file: null,
         github_link: '',
         demo_link: ''
     });
+    const [imagePreview, setImagePreview] = useState('');
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -19,6 +20,16 @@ function ProjectsTab({ profileData }) {
         }
     }, [profileData]);
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setNewProject({ ...newProject, image_file: file });
+            // Створюємо URL для прев'ю зображення
+            const previewUrl = URL.createObjectURL(file);
+            setImagePreview(previewUrl);
+        }
+    };
+
     const handleAddProject = async () => {
         if (!newProject.title || !newProject.description) return;
         
@@ -26,23 +37,79 @@ function ProjectsTab({ profileData }) {
         setSuccessMessage('');
         
         try {
-            const response = await axiosInstance.post('/projects', {
-                ...newProject,
-                user_id: profileData.id
+            // Використовуємо FormData для відправки файлів
+            const formData = new FormData();
+            formData.append('title', newProject.title);
+            formData.append('description', newProject.description);
+            if (newProject.image_file) {
+                formData.append('image', newProject.image_file);
+            }
+            formData.append('github_link', newProject.github_link);
+            formData.append('demo_link', newProject.demo_link);
+            formData.append('user_id', profileData.id);
+            
+            const response = await axiosInstance.post('/projects', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
+            
             setProjects([...projects, response.data]);
             setNewProject({
                 title: '',
                 description: '',
-                image_url: '',
+                image_file: null,
                 github_link: '',
                 demo_link: ''
             });
+            setImagePreview('');
             setSuccessMessage("Проект успішно додано!");
             setTimeout(() => setSuccessMessage(''), 3000);
         } catch (err) {
             console.error("Error adding project:", err);
             setError(err.response?.data?.message || "Не вдалося додати проект.");
+        }
+    };
+
+    const handleUpdateProject = async (projectId, updatedData, image) => {
+        setError('');
+        
+        try {
+            let response;
+            // Використовуємо FormData, якщо є зображення
+            if (image) {
+                const formData = new FormData();
+                
+                if (updatedData.title) formData.append('title', updatedData.title);
+                if (updatedData.description) formData.append('description', updatedData.description);
+                formData.append('image', image);
+                if (updatedData.github_link) formData.append('github_link', updatedData.github_link);
+                if (updatedData.demo_link) formData.append('demo_link', updatedData.demo_link);
+                
+                response = await axiosInstance.put(`/projects/${projectId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                
+                // Оновлюємо локальний стан з даних сервера
+                setProjects(projects.map(project => 
+                    project.id === projectId ? response.data : project
+                ));
+            } else {
+                response = await axiosInstance.put(`/projects/${projectId}`, updatedData);
+                
+                // Оновлюємо локальний стан для текстових полів
+                setProjects(projects.map(project => 
+                    project.id === projectId ? {...project, ...updatedData} : project
+                ));
+            }
+            
+            setSuccessMessage("Проект успішно оновлено!");
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            console.error("Error updating project:", err);
+            setError(err.response?.data?.message || "Не вдалося оновити проект.");
         }
     };
 
@@ -61,19 +128,11 @@ function ProjectsTab({ profileData }) {
         }
     };
 
-    const handleUpdateProject = async (projectId, updatedData) => {
-        setError('');
-        
-        try {
-            await axiosInstance.put(`/projects/${projectId}`, updatedData);
-            
-            setProjects(projects.map(project => 
-                project.id === projectId ? {...project, ...updatedData} : project
-            ));
-            
-        } catch (err) {
-            console.error("Error updating project:", err);
-            setError(err.response?.data?.message || "Не вдалося оновити проект.");
+    // Handle file input for existing projects
+    const handleProjectImageChange = (projectId, e) => {
+        const file = e.target.files[0];
+        if (file) {
+            handleUpdateProject(projectId, {}, file);
         }
     };
 
@@ -114,24 +173,36 @@ function ProjectsTab({ profileData }) {
                                     </div>
                                 </div>
                                 <p className="text-gray-300 mt-1">{project.description}</p>
+                                
+                                {/* Додаємо відображення зображення проекту */}
+                                {project.image_url && (
+                                    <div className="mt-3">
+                                        <img 
+                                            src={`http://localhost:3001/${project.image_url}`} 
+                                            alt={project.title}
+                                            className="h-32 w-auto object-cover rounded"
+                                        />
+                                    </div>
+                                )}
+                                
                                 <div className="mt-2 space-y-1 text-sm">
-                                    {project.image_url && (
-                                        <div className="flex items-center">
-                                            <span className="font-medium mr-2">Зображення:</span>
-                                            <input 
-                                                type="text" 
-                                                className="flex-grow p-1 rounded bg-blue-950 border border-blue-700 text-white"
-                                                value={project.image_url}
-                                                onChange={(e) => handleUpdateProject(project.id, {...project, image_url: e.target.value})}
-                                            />
-                                        </div>
-                                    )}
+                                    {/* Завантаження зображення для існуючого проекту */}
+                                    <div className="flex items-center">
+                                        <span className="font-medium mr-2">Зображення:</span>
+                                        <input 
+                                            type="file" 
+                                            onChange={(e) => handleProjectImageChange(project.id, e)}
+                                            className="text-sm text-white"
+                                            accept="image/*"
+                                        />
+                                    </div>
+                                    
                                     <div className="flex items-center">
                                         <span className="font-medium mr-2">GitHub:</span>
                                         <input 
                                             type="text" 
                                             className="flex-grow p-1 rounded bg-blue-950 border border-blue-700 text-white"
-                                            value={project.github_link}
+                                            value={project.github_link || ''}
                                             onChange={(e) => handleUpdateProject(project.id, {...project, github_link: e.target.value})}
                                             placeholder="URL GitHub репозиторію"
                                         />
@@ -141,7 +212,7 @@ function ProjectsTab({ profileData }) {
                                         <input 
                                             type="text" 
                                             className="flex-grow p-1 rounded bg-blue-950 border border-blue-700 text-white"
-                                            value={project.demo_link}
+                                            value={project.demo_link || ''}
                                             onChange={(e) => handleUpdateProject(project.id, {...project, demo_link: e.target.value})}
                                             placeholder="URL демо-версії"
                                         />
@@ -180,14 +251,22 @@ function ProjectsTab({ profileData }) {
                     </div>
                     
                     <div>
-                        <label className="block text-sm font-medium mb-2">URL зображення</label>
+                        <label className="block text-sm font-medium mb-2">Зображення проекту</label>
                         <input
-                            type="text"
+                            type="file"
+                            accept="image/*"
                             className="w-full p-2 rounded bg-blue-950 border border-blue-700 text-white"
-                            value={newProject.image_url}
-                            onChange={(e) => setNewProject({...newProject, image_url: e.target.value})}
-                            placeholder="https://example.com/image.jpg"
+                            onChange={handleImageChange}
                         />
+                        {imagePreview && (
+                            <div className="mt-2">
+                                <img 
+                                    src={imagePreview} 
+                                    alt="Preview" 
+                                    className="h-32 w-auto object-cover rounded" 
+                                />
+                            </div>
+                        )}
                     </div>
                     
                     <div>

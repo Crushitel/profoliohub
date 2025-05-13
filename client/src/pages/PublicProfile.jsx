@@ -57,8 +57,10 @@ const PublicProfile = () => {
     }
 
     try {
+      // user_id - це ID користувача, якому залишають відгук
+      // author_id автоматично буде взято з токена на сервері
       await axiosInstance.post("/testimonials", {
-        user_id: profile.id, // ID користувача, якому залишають відгук
+        user_id: profile.id,
         rating: reviewForm.rating,
         comment: reviewForm.comment,
       });
@@ -72,7 +74,7 @@ const PublicProfile = () => {
     } catch (err) {
       console.error("Error adding review:", err);
       setReviewError(
-        err.response?.data?.message || "Помилка при додаванні відгуку",
+        err.response?.data?.message || "Помилка при додаванні відгуку"
       );
     }
   };
@@ -244,10 +246,34 @@ const PublicProfile = () => {
       <div className="mt-6 rounded-lg bg-blue-900 p-4 shadow-md md:p-6">
         <h2 className="mb-4 text-xl font-bold">Відгуки</h2>
 
-        {profile.Testimonials && profile.Testimonials.length > 0 ? (
+        {profile.TestimonialsReceived && profile.TestimonialsReceived.length > 0 ? (
           <div className="mb-8 space-y-4">
-            {profile.Testimonials.map((testimonial) => (
+            {profile.TestimonialsReceived.map((testimonial) => (
               <div key={testimonial.id} className="rounded-lg bg-blue-700 p-4">
+                {/* Додайте блок з інформацією про автора */}
+                {testimonial.Author && (
+                  <div className="mb-3 flex items-center">
+                    <div className="h-10 w-10 overflow-hidden rounded-full bg-white flex items-center justify-center mr-3">
+                      {testimonial.Author.avatar_url ? (
+                        <img
+                          src={`http://localhost:3001/${testimonial.Author.avatar_url}`}
+                          alt={`${testimonial.Author.first_name} ${testimonial.Author.last_name}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <img src={Avatar} alt="avatar" className="h-6 w-6" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">
+                        {testimonial.Author.first_name} {testimonial.Author.last_name}
+                      </p>
+                      <p className="text-sm text-blue-300">@{testimonial.Author.username}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Існуючий код рейтингу */}
                 <div className="mb-2 flex items-center">
                   <div className="flex">
                     {Array.from({ length: 5 }, (_, i) => (

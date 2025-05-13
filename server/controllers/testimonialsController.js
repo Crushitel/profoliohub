@@ -1,25 +1,33 @@
-const { Testimonials } = require('../models');
+const { Testimonial } = require('../models');
 const ApiError = require('../Error/ApiError');
 class TestimonialsController{
     async createTestimonial(req, res, next) {
-        const { rating, comment, user_id, testimonials_id } = req.body;
         try {
-            const testimonial = await Testimonials.create({
-                rating,
-                comment,
+            const { user_id, rating, comment } = req.body;
+            const author_id = req.user.id; // ID автентифікованого користувача
+
+            // Перевірка, чи не залишає користувач відгук самому собі
+            if (parseInt(user_id) === author_id) {
+                return next(ApiError.badRequest("Ви не можете залишити відгук самому собі"));
+            }
+
+            const testimonial = await Testimonial.create({
                 user_id,
-                testimonials_id
+                author_id, // додаємо ID автора
+                rating,
+                comment
             });
-            return res.status(201).json(testimonial);
+
+            res.status(201).json(testimonial);
         } catch (error) {
-            next(ApiError.internalServerError("Failed to create Testimonial"));
-            console.log(error);
+            console.error("Error creating testimonial:", error);
+            next(ApiError.internalServerError("Помилка при створенні відгуку"));
         }
     }
 
     async getTestimonials(req, res, next) {
         try {
-            const testimonials = await Testimonials.findAll();
+            const testimonials = await Testimonial.findAll();
             if (!testimonials || testimonials.length === 0) {
                 return next(ApiError.notFound("No Testimonials found"));
             }
@@ -32,7 +40,7 @@ class TestimonialsController{
     async getTestimonialById(req, res, next) {
         const { id } = req.params;
         try {
-            const testimonial = await Testimonials.findOne({ where: { id } });
+            const testimonial = await Testimonial.findOne({ where: { id } });
             if (!testimonial) {
                 return next(ApiError.notFound("Testimonial not found"));
             }
@@ -46,7 +54,7 @@ class TestimonialsController{
         const { id } = req.params;
         const { rating, comment } = req.body;
         try {
-            const testimonial = await Testimonials.findOne({ where: { id } });
+            const testimonial = await Testimonial.findOne({ where: { id } });
             if (!testimonial) {
                 return next(ApiError.notFound("Testimonial not found"));
             }
@@ -61,7 +69,7 @@ class TestimonialsController{
     async deleteTestimonial(req, res, next) {
         const { id } = req.params;
         try {
-            const testimonial = await Testimonials.findOne({ where: { id } });
+            const testimonial = await Testimonial.findOne({ where: { id } });
             if (!testimonial) {
                 return next(ApiError.notFound("Testimonial not found"));
             }

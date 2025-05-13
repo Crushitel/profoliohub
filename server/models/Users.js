@@ -48,7 +48,18 @@ module.exports = (sequelize, DataTypes) => {
         Users.hasMany(models.UserSkill, { foreignKey: 'user_id' });
         Users.hasMany(models.Projects, { foreignKey: 'user_id' });
         Users.hasMany(models.Experiences, { foreignKey: 'user_id' });
-        Users.hasMany(models.Testimonials, { foreignKey: 'user_id' });
+
+        // Відгуки, залишені ЦЬОМУ користувачу
+        Users.hasMany(models.Testimonial, {
+            foreignKey: 'user_id',
+            as: 'TestimonialsReceived',
+        });
+
+        // Відгуки, залишені ЦИМ користувачем
+        Users.hasMany(models.Testimonial, {
+            foreignKey: 'author_id',
+            as: 'AuthoredTestimonials',
+        });
     };
 
     return Users;

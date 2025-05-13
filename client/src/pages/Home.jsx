@@ -13,7 +13,7 @@ const Home = () => {
         <h1 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
           Створи своє персональне портфоліо – покажи світові свої досягнення!
         </h1>
-        <p className="mt-4 text-sm text-blue-300 sm:text-base lg:text-lg">
+        <p className="mt-4 text-sm text-gray-100 sm:text-base lg:text-lg">
           Легко створюй, редагуй і публікуй свої проєкти та досвід
         </p>
         <div className="3xl:justify-center mt-6 flex flex-col sm:flex-row sm:space-x-4">
@@ -37,7 +37,7 @@ const Home = () => {
         <h2 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
           Про платформу
         </h2>
-        <p className="mt-4 text-sm text-blue-300 sm:text-base lg:text-lg">
+        <p className="mt-4 text-sm text-gray-100 sm:text-base lg:text-lg">
           Наша місія — допомогти кожному професіоналу створити потужний
           особистий бренд та продемонструвати свої досягнення світові. Ми
           віримо, що кожен талант заслуговує бути поміченим.

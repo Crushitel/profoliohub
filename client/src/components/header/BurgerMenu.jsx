@@ -64,15 +64,6 @@ const BurgerMenu = ({ user, logout }) => {
           </li>
           <li className="mb-2">
             <Link
-              to="/"
-              className="block text-white transition-colors hover:text-purple-600"
-              onClick={() => setIsOpen(false)}
-            >
-              Портфоліо
-            </Link>
-          </li>
-          <li className="mb-2">
-            <Link
               to="/profile"
               className="block text-white transition-colors hover:text-purple-600"
               onClick={() => setIsOpen(false)}

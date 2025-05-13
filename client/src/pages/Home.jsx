@@ -24,10 +24,10 @@ const Home = () => {
             Зареєструватися
           </Link>
           <Link
-            to="/"
+            to="/profile"
             className="mt-4 rounded-lg border border-blue-700 bg-blue-900 px-6 py-2 text-center text-white transition-colors hover:bg-blue-800 sm:mt-0"
           >
-            Дізнатися більше
+            Перейти до профілю
           </Link>
         </div>
       </div>

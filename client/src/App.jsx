@@ -10,6 +10,8 @@ import EditProfile from "./pages/EditProfile";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicProfile from "./pages/PublicProfile";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -39,6 +41,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>

@@ -24,23 +24,18 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to="/about" className="hover:text-white">
-                Про платформу
+              <Link to="/" className="hover:text-white">
+                Портфоліо
               </Link>
             </li>
             <li>
-              <Link to="/features" className="hover:text-white">
-                Функціонал
+              <Link to="/profile" className="hover:text-white">
+                Профіль
               </Link>
             </li>
             <li>
-              <Link to="/faq" className="hover:text-white">
-                Як це працює
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:text-white">
-                Контакти
+              <Link to="/search" className="hover:text-white">
+                Пошук
               </Link>
             </li>
           </ul>
@@ -62,19 +57,6 @@ const Footer = () => {
                 className="transition-colors hover:text-white"
               >
                 Політика конфіденційності
-              </Link>
-            </li>
-            <li>
-              <Link to="/data" className="transition-colors hover:text-white">
-                Обробка даних
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/community"
-                className="transition-colors hover:text-white"
-              >
-                Правила спільноти
               </Link>
             </li>
           </ul>

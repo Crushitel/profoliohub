@@ -13,6 +13,7 @@ const bcrypt = require("bcrypt");
 const ApiError = require("../Error/ApiError");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken"); // Імпортуємо jwt
+const { sendPasswordResetEmail } = require('../service/mail-service'); 
 
 class UserController {
   async SignUp(req, res, next) {
@@ -348,6 +349,67 @@ class UserController {
     } catch (error) {
       console.log(error);
       next(ApiError.internalServerError("Помилка при пошуку користувачів"));
+    }
+  }
+
+  // Запит на відновлення пароля
+  async forgotPassword(req, res, next) {
+    try {
+      const { email } = req.body;
+
+      // Перевірка наявності користувача з таким email
+      const user = await Users.findOne({ where: { email } });
+      if (!user) {
+        return next(ApiError.notFound("Користувача з такою електронною поштою не знайдено"));
+      }
+
+      // Генерація токена відновлення
+      const resetToken = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" } // Токен дійсний 1 годину
+      );
+
+      // Відправка токена через email
+      await sendPasswordResetEmail(email, resetToken);
+      
+      res.json({
+        message: "Інструкції для відновлення пароля надіслано на вашу електронну пошту"
+        // Тепер ми не повертаємо resetToken у відповіді
+      });
+    } catch (error) {
+      console.error("Error in forgotPassword:", error);
+      next(ApiError.internalServerError("Помилка при обробці запиту на відновлення пароля"));
+    }
+  }
+
+  // Скидання пароля за токеном
+  async resetPassword(req, res, next) {
+    try {
+      const { token, newPassword } = req.body;
+
+      // Перевірка валідності токена
+      let decoded;
+      try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+      } catch (err) {
+        return next(ApiError.unauthorized("Недійсний або прострочений токен"));
+      }
+
+      // Пошук користувача
+      const user = await Users.findByPk(decoded.id);
+      if (!user) {
+        return next(ApiError.notFound("Користувача не знайдено"));
+      }
+
+      // Хешування та оновлення пароля
+      const hash = await bcrypt.hash(newPassword, 10);
+      await user.update({ password_hash: hash });
+
+      res.json({ message: "Пароль успішно змінено" });
+    } catch (error) {
+      console.error("Error in resetPassword:", error);
+      next(ApiError.internalServerError("Помилка при зміні пароля"));
     }
   }
 }

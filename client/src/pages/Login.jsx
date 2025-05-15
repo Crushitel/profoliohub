@@ -81,6 +81,11 @@ const Login = () => {
               onChange={handleChange}
               className="w-full rounded-lg border border-blue-400 bg-blue-950 px-3 py-2 text-white"
             />
+            <div className="mt-1">
+              <Link to="/forgot-password" className="text-sm text-blue-300 hover:text-blue-200">
+                Забули пароль?
+              </Link>
+            </div>
           </div>
           <button
             type="submit"

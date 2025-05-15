@@ -12,6 +12,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicProfile from "./pages/PublicProfile";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/search" element={<Search />} />
           <Route path="/profile/:username" element={<PublicProfile />} />
           <Route

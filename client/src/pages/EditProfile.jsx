@@ -7,6 +7,7 @@ import BasicInfoTab from "../components/profile-edit/BasicInfoTab";
 import SkillsTab from "../components/profile-edit/SkillsTab";
 import ProjectsTab from "../components/profile-edit/ProjectsTab";
 import ExperienceTab from "../components/profile-edit/ExperienceTab";
+import SecurityTab from "../components/profile-edit/SecurityTab";
 
 function EditProfile() {
   const [profileData, setProfileData] = useState(null);
@@ -66,6 +67,12 @@ function EditProfile() {
             Основна
           </button>
           <button
+            className={`mr-2 min-w-24 rounded-t-lg py-3 text-sm transition-colors sm:px-4 md:min-w-0 md:py-2 md:text-base ${activeTab === "security" ? "bg-blue-700" : "hover:bg-blue-800"}`}
+            onClick={() => setActiveTab("security")}
+          >
+            Безпека
+          </button>
+          <button
             className={`mr-2 min-w-24 rounded-t-lg py-3 text-sm transition-colors sm:px-4 md:min-w-0 md:py-2 md:text-base ${activeTab === "skills" ? "bg-blue-700" : "hover:bg-blue-800"}`}
             onClick={() => setActiveTab("skills")}
           >
@@ -97,6 +104,7 @@ function EditProfile() {
         {activeTab === "testimonials" && (
           <TestimonialsTab profileData={profileData} />
         )}
+        {activeTab === "security" && <SecurityTab />}
       </div>
 
       {/* Bottom Actions */}

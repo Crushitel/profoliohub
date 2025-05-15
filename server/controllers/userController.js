@@ -412,6 +412,39 @@ class UserController {
       next(ApiError.internalServerError("Помилка при зміні пароля"));
     }
   }
+
+  // Зміна пароля аутентифікованого користувача
+  async changePassword(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const { currentPassword, newPassword } = req.body;
+      
+      // Перевірка, чи існує користувач
+      const user = await Users.findByPk(userId);
+      if (!user) {
+        return next(ApiError.notFound("Користувача не знайдено"));
+      }
+      
+      // Перевірка поточного пароля
+      const isPasswordValid = await bcrypt.compare(
+        currentPassword,
+        user.password_hash
+      );
+      
+      if (!isPasswordValid) {
+        return next(ApiError.badRequest("Неправильний поточний пароль"));
+      }
+      
+      // Хешування та оновлення пароля
+      const hash = await bcrypt.hash(newPassword, 10);
+      await user.update({ password_hash: hash });
+      
+      res.json({ message: "Пароль успішно змінено" });
+    } catch (error) {
+      console.error("Error in changePassword:", error);
+      next(ApiError.internalServerError("Помилка при зміні пароля"));
+    }
+  }
 }
 
 module.exports = new UserController();

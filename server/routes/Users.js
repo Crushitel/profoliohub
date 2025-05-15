@@ -18,8 +18,8 @@ router.get('/search', userController.searchUsers);
 
 router.get('/public/:username', userController.getPublicProfile);
 
-// Нові маршрути для відновлення пароля
 router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', userController.resetPassword);
+router.post('/change-password', authMiddleware, userController.changePassword);
 
 module.exports = router;

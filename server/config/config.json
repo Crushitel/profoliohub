@@ -7,16 +7,16 @@
   },
   "test": {
     "username": "root",
-    "password": null,
-    "database": "database_test",
+    "password": "my-secret-pw",
+    "database": "ProfolioDB",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "freedb_vadpro",
+    "password": "AZMsWH%dJ2d&n$h",
+    "database": "freedb_ProfolioDB",
+    "host": "sql.freedb.tech",
     "dialect": "mysql"
   }
 }

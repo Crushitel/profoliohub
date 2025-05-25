@@ -24,11 +24,11 @@ function BasicInfoTab({ profileData }) {
         
         // Якщо URL починається з /, то це відносний шлях
         if (url.startsWith('/')) {
-            return `http://localhost:3001${url}`;
+            return `${import.meta.env.VITE_SERVER_URL}${url}`;
         }
         
         // В іншому випадку додати базовий URL
-        return `http://localhost:3001/${url}`;
+        return `${import.meta.env.VITE_SERVER_URL}/${url}`;
     };
 
     useEffect(() => {

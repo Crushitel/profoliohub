@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+// Використовуємо змінну середовища для базового URL
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: `${import.meta.env.VITE_SERVER_URL}/api`,
+  timeout: 10000,
 });
 
 axiosInstance.interceptors.request.use(

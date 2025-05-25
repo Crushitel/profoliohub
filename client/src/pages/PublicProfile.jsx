@@ -103,7 +103,7 @@ const PublicProfile = () => {
           <div className="mb-4 flex h-32 w-32 items-center justify-center rounded-full bg-white">
             {profile.avatar_url ? (
               <img
-                src={`http://localhost:3001/${profile.avatar_url}`}
+                src={`${import.meta.env.VITE_SERVER_URL}/${profile.avatar_url}`}
                 alt="Avatar"
                 className="h-full w-full rounded-full object-cover"
               />
@@ -167,7 +167,7 @@ const PublicProfile = () => {
                   {project.image_url && (
                     <div className="mb-3">
                       <img
-                        src={`http://localhost:3001/${project.image_url}`}
+                        src={`${import.meta.env.VITE_SERVER_URL}/${project.image_url}`}
                         alt={project.title}
                         className="h-36 w-full rounded-lg object-cover"
                       />
@@ -256,7 +256,7 @@ const PublicProfile = () => {
                     <div className="h-10 w-10 overflow-hidden rounded-full bg-white flex items-center justify-center mr-3">
                       {testimonial.Author.avatar_url ? (
                         <img
-                          src={`http://localhost:3001/${testimonial.Author.avatar_url}`}
+                          src={`${import.meta.env.VITE_SERVER_URL}/${testimonial.Author.avatar_url}`}
                           alt={`${testimonial.Author.first_name} ${testimonial.Author.last_name}`}
                           className="h-full w-full object-cover"
                         />

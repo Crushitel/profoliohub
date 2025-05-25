@@ -111,7 +111,7 @@ const Profile = () => {
                       <img
                         src={`http://localhost:3001/${project.image_url}`}
                         alt={project.title}
-                        className="w-full h-36 rounded-lg"
+                        className="w-full aspect-16/9 rounded-lg"
                       />
                     </div>
                   )}
@@ -245,7 +245,7 @@ const Profile = () => {
             ))}
           </div>
         ) : (
-          <p className="mb-6 text-blue-300">Відгуків ще немає</p>
+          <p className="mb-6 text-white">Відгуків ще немає</p>
         )}
       </div>
     </div>
